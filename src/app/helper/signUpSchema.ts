@@ -1,33 +1,32 @@
-export const schema = {
+import { RJSFSchema } from "@rjsf/utils";
+
+export const schema: RJSFSchema = {
   type: "object",
   properties: {
     firstName: {
       type: "string",
       title: "First Name",
-      minLength: 1,
-      maxLength: 50,
+      description: "Enter your first name",
     },
     lastName: {
       type: "string",
       title: "Last Name",
-      minLength: 1,
-      maxLength: 50,
+      description: "Enter your last name",
     },
     email: {
       type: "string",
       title: "Email",
-      format: "email",
-      minLength: 1,
+      description: "Enter your email address",
     },
     password: {
       type: "string",
       title: "Password",
-      minLength: 8,
+      description: "Enter your password",
     },
     confirmPassword: {
       type: "string",
       title: "Confirm Password",
-      minLength: 8,
+      description: "Confirm your password",
     },
   },
   required: ["firstName", "lastName", "email", "password", "confirmPassword"],
