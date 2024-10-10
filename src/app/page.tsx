@@ -8,6 +8,14 @@ import { useState, useEffect } from "react";
 import { SubmitButton } from "./templates/RJSFTemplate";
 import { useRoles } from "@/hooks/useRoles";
 
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetFooter,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+
 export default function Home() {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -18,7 +26,11 @@ export default function Home() {
     role: "",
   });
 
+  const [errorList, setErrorList] = useState<any[]>([]);
+
   const { loading, roles, error } = useRoles();
+
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   useEffect(() => {
     if (!loading && roles.length > 0) {
@@ -45,7 +57,8 @@ export default function Home() {
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).+$/;
     if (!data.password || data.password.length < 8) {
       errors.password.addError("Password must be at least 8 characters long.");
-    } else if (!passwordRegex.test(data.password)) {
+    }
+    if (!passwordRegex.test(data.password)) {
       errors.password.addError(
         "Password must contain at least one letter and one number."
       );
@@ -54,11 +67,6 @@ export default function Home() {
       errors.confirmPassword.addError("Passwords do not match.");
     }
     return errors;
-  };
-
-  const onFormSubmit = () => {
-    alert("Form submitted successfully");
-    console.log("Form submitted with data:", formData);
   };
 
   const roleOptions = roles.map((role) => ({
@@ -87,6 +95,17 @@ export default function Home() {
     },
   };
 
+  const handleSubmit = () => {
+    setErrorList([]);
+    alert("Form submitted successfully");
+    console.log("Form submitted with data:", formData);
+  };
+
+  const handleError = (errors: any) => {
+    setErrorList(errors);
+    setIsSheetOpen(true);
+  };
+
   return (
     <div className="w-screen h-screen flex justify-center items-center">
       <Form
@@ -99,14 +118,39 @@ export default function Home() {
         schema={schema}
         uiSchema={signUpUiSchema}
         formData={formData}
+        onError={handleError}
+        onSubmit={handleSubmit}
         className="w-1/3"
         templates={{
           ButtonTemplates: {
             SubmitButton,
           },
         }}
-        onSubmit={onFormSubmit}
       />
+
+      <Sheet open={isSheetOpen}>
+        <SheetContent className="overflow-y-scroll">
+          <h2 className="text-lg font-semibold mb-2">Form Errors</h2>
+          <div id="form-errors" className="p-4 bg-red-50 rounded shadow">
+            {errorList.length > 0 ? (
+              <ul className="list-disc ml-5 text-red-600">
+                {errorList.map((error, index) => (
+                  <li key={index}>{error.stack}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>No errors</p>
+            )}
+          </div>
+          <SheetFooter>
+            <SheetClose asChild>
+              <Button onClick={() => setIsSheetOpen(false)} className="mt-2">
+                Close
+              </Button>
+            </SheetClose>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }

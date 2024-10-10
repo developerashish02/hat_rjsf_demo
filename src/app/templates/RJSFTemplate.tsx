@@ -27,7 +27,7 @@ export const CustomTextInput = ({
   required,
 }: any) => (
   <div className="mb-8">
-    <Label htmlFor={id} className="text-gray-700  font-semibold text-2xl">
+    <Label htmlFor={id} className="text-gray-700 font-semibold text-2xl">
       {label} {required && <span className="text-red-500">*</span>}
     </Label>
     <Input
@@ -35,7 +35,7 @@ export const CustomTextInput = ({
       id={id}
       value={value || ""}
       onChange={(e) => onChange(e.target.value)}
-      className="text-xl  mt-2 block w-full border border-gray-300 rounded-lg shadow-lg py-8 px-4 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150"
+      className="text-xl mt-2 block w-full border border-gray-300 rounded-lg shadow-lg py-8 px-4 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-150"
       placeholder={`Enter your ${label.toLowerCase()}`}
     />
   </div>
